@@ -44,6 +44,28 @@ impl Default for Person {
 
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        let default_person = Person::default();
+
+        let Some((name, mut age_str)) = s.split_once(",") else {
+            return default_person;
+        };
+
+        if name.is_empty() {
+            return default_person;
+        }
+
+        if let Some((new_age_str, _)) = age_str.split_once(",") {
+            age_str = new_age_str;
+        };
+
+        let Ok(age) = age_str.parse::<usize>() else {
+            return default_person;
+        };
+
+        Person {
+            name: name.into(),
+            age,
+        }
     }
 }
 
